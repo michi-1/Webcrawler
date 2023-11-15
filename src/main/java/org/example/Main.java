@@ -10,46 +10,56 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        String url = "https://www.autoscout24.at"; // URL of the website
+        String baseUrl = "https://www.autoscout24.at/lst";
+        String brand = "bmw";
+        String model = "x6";
+        String year = "2014";
+        String price = "50000";
 
         try {
-            // Create a map for search parameters
-            Map<String, String> parameters = new HashMap<>();
-            parameters.put("make", "audi");
-            parameters.put("model", "a4");
+            int currentPage = 1;
+            boolean hasNextPage = true;
 
+            while (hasNextPage) {
+                String searchUrl = buildSearchUrl(baseUrl, model, brand, year, price, currentPage);
+                Document document = Jsoup.connect(searchUrl).get();
+                String title = document.title();
+                System.out.println("Title: " + title);
 
-            String searchUrl = buildSearchUrl(url, parameters);
+                Elements productElements = document.select(".list-page-item");
+                for (Element productElement : productElements) {
+                    System.out.println("Product: " + productElement.text());
+                }
 
+                // Check if there is a next page
+                Elements nextPageElements = document.select(".FilteredListPagination_button__41hHM");
+                hasNextPage = !nextPageElements.isEmpty();
 
-            Document document = Jsoup.connect("https://www.autoscout24.at/lst/mercedes-benz").get();
-
-
-            String title = document.title();
-            System.out.println("Title: " + title);
-
-
-            Elements productElements = document.select(".list-page-item");
-            for (Element productElement : productElements) {
-
-                System.out.println("Product: " + productElement.text());
+                // Move to the next page
+                currentPage++;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-    private static String buildSearchUrl(String baseUrl, Map<String, String> parameters) {
+    private static String buildSearchUrl(String baseUrl, String model, String brand, String year, String price, int page) {
         StringBuilder stringBuilder = new StringBuilder(baseUrl);
-        stringBuilder.append("/search");
-        if (!parameters.isEmpty()) {
-            stringBuilder.append("?");
-            for (Map.Entry<String, String> entry : parameters.entrySet()) {
-                stringBuilder.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
-            }
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        if (brand != null) {
+            stringBuilder.append("/" + brand);
         }
+        if (model != null) {
+            stringBuilder.append("/" + model);
+        }
+        stringBuilder.append("?");
+        if (model != year) {
+            stringBuilder.append("fregfrom=" + year + "&");
+        }
+        if (model != year) {
+            stringBuilder.append("priceto=" + price + "&");
+        }
+        stringBuilder.append("page=" + page);  // Add page parameter
+        System.out.println(stringBuilder.toString());
         return stringBuilder.toString();
     }
 }
