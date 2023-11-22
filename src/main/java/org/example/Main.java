@@ -1,17 +1,12 @@
 package org.example;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 public class Main {
     public static void main(String[] args) {
@@ -40,9 +35,9 @@ public class Main {
                 Elements nextPageElements = document.select(".FilteredListPagination_button__41hHM");
                 hasNextPage = !nextPageElements.isEmpty();
 
-
+                // Move to the next page
+                currentPage++;
             }
-            sendEmail("nahid_noorani@yahoo.com", "Car Information", emailContent);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,43 +61,5 @@ public class Main {
         stringBuilder.append("page=" + page);  // Add page parameter
         System.out.println(stringBuilder.toString());
         return stringBuilder.toString();
-    }
-    private static void sendEmail(String to, String subject, String content) {
-
-        String from = "nourani.nahid@gmail.com";
-        String password = "";
-
-
-        Properties properties = System.getProperties();
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
-
-
-        Session session = Session.getInstance(properties, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(from, password);
-            }
-        });
-
-        try {
-
-            MimeMessage message = new MimeMessage(session);
-
-            message.setFrom(new InternetAddress(from));
-
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-
-            message.setSubject(subject);
-
-            message.setText(content);
-
-            Transport.send(message);
-            System.out.println("Sent email successfully!");
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
-        }
     }
 }
