@@ -21,7 +21,7 @@ public class WebCrawler {
 
     }
     public void crawlAndSave(String brand, String model, String year, String price, String filePath) {
-        List<String> carData = new ArrayList<>(); // Liste für gesammelte Daten
+        List<String> carData = new ArrayList<>();
         statusLabel.setText("Status: Crawling...");
         String baseUrl = "https://www.autoscout24.at/lst";
 
@@ -52,7 +52,7 @@ public class WebCrawler {
                 currentPage++;
             }
 
-            // PDF erzeugen und speichern
+
             PDFGenerator pdfGenerator = new PDFGenerator();
             pdfGenerator.createPDF(filePath, carData);
             Platform.runLater(() -> statusLabel.setText("Status: Crawling complete"));
