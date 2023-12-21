@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.example.EmailSender;
 import org.example.WebCrawler;
 
 import java.io.File;
@@ -89,5 +90,44 @@ public class WebCrawlerUI extends Application {
         // Instantiate WebCrawler and start crawling
         WebCrawler webCrawler = new WebCrawler(statusLabel);
         webCrawler.crawlAndSave(brand, model, year, price,filePath);
+        sendEmailWithPDF(filePath);
     }
+    private void sendEmailWithPDF(String filePath) {
+
+        String host = "smtp.gmail.com";
+        String port = "587";
+        String mailFrom = "carcrawlpro@gmail.com";
+        String password = "idvg yxfh gept zkpa";
+        String mailTo = "nourani.nahid@gmail.com";
+        String subject = "Begrüßung zu Ihrem individuellen Fahrzeugbericht";
+        String message = "Sehr geehrter Kunde,<br><br>"
+                + "Wir freuen uns, Ihnen unseren neuesten Fahrzeugbericht präsentieren zu können. "
+                + "In diesem Bericht finden Sie eine Übersicht über die neuesten Fahrzeuge auf dem Markt, "
+                + "die Ihren spezifischen Kriterien entsprechen.<br><br>"
+                + "Unsere Experten haben sorgfältig die Daten von verschiedenen Quellen gesammelt und analysiert, "
+                + "um Ihnen eine Auswahl an hochwertigen Fahrzeugen vorzustellen. "
+                + "Wir verstehen, wie wichtig es ist, das perfekte Auto zu finden, "
+                + "das Ihren Bedürfnissen und Wünschen entspricht.<br><br>"
+                + "In diesem Bericht werden Sie Informationen zu den neuesten Automodellen, Marken, Preisen und Jahresmodellen finden. "
+                + "Wir haben sicherzustellen versucht, dass alle aufgeführten Fahrzeuge Ihren Anforderungen entsprechen und eine Vielzahl von Optionen bieten.<br><br>"
+                + "Es war uns eine Freude, diesen Bericht für Sie zu erstellen, "
+                + "und wir hoffen, dass er Ihnen bei Ihrer Suche nach einem neuen Fahrzeug hilfreich ist. "
+                + "Bei Fragen oder weiterem Bedarf stehen wir Ihnen gerne zur Verfügung.<br><br>"
+                + "Vielen Dank, dass Sie unsere Dienstleistungen in Anspruch nehmen. "
+                + "Wir wünschen Ihnen viel Erfolg bei der Suche nach Ihrem Traumauto!<br><br>"
+                + "Mit freundlichen Grüßen,<br><br>"
+                + "Ihr Carcrawlpro Team<br><br>";
+
+
+
+        EmailSender mailer = new EmailSender();
+        try {
+            mailer.sendEmailWithAttachment(host, port, mailFrom, password, mailTo, subject, message, filePath);
+            Platform.runLater(() -> statusLabel.setText("E-Mail wurde erfolgreich gesendet."));
+        } catch (Exception e) {
+            Platform.runLater(() -> statusLabel.setText("Fehler beim Senden der E-Mail: " + e.getMessage()));
+            e.printStackTrace();
+        }
+    }
+
 }
