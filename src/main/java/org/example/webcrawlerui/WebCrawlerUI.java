@@ -13,6 +13,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.WebCrawler;
 
+import java.io.File;
+
 public class WebCrawlerUI extends Application {
 
     private TextField brandField = new TextField();
@@ -77,9 +79,15 @@ public class WebCrawlerUI extends Application {
         String model = modelField.getText();
         String year = yearField.getText();
         String price = priceField.getText();
+        String userDir = System.getProperty("user.dir");
+
+        // Zielpfad für das 'target'-Verzeichnis bilden
+        String targetDirPath = userDir + File.separator + "target";
+        String fileName = "autoscout24-report.pdf";
+        String filePath = targetDirPath + File.separator + fileName;
 
         // Instantiate WebCrawler and start crawling
         WebCrawler webCrawler = new WebCrawler(statusLabel);
-        webCrawler.crawl(brand, model, year, price);
+        webCrawler.crawlAndSave(brand, model, year, price,filePath);
     }
 }

@@ -8,19 +8,21 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WebCrawler {
 
     private Label statusLabel;
 
+
     public WebCrawler(Label statusLabel) {
         this.statusLabel = statusLabel;
+
     }
-
-    public void crawl(String brand, String model, String year, String price) {
-        // Clear the status label
+    public void crawlAndSave(String brand, String model, String year, String price, String filePath) {
+        List<String> carData = new ArrayList<>(); // Liste für gesammelte Daten
         statusLabel.setText("Status: Crawling...");
-
         String baseUrl = "https://www.autoscout24.at/lst";
 
         try {
@@ -30,26 +32,29 @@ public class WebCrawler {
             while (hasNextPage) {
                 String searchUrl = buildSearchUrl(baseUrl, model, brand, year, price, currentPage);
                 Document document = Jsoup.connect(searchUrl).get();
-
-                // Process the document, e.g., print the title
+                int productNumber = 1;
                 String title = document.title();
                 System.out.println("Title: " + title);
 
-                // Process product elements
                 Elements productElements = document.select(".list-page-item");
                 for (Element productElement : productElements) {
-                    System.out.println("Product: " + productElement.text());
+                    String productInfo = productElement.text();
+                    productInfo = productInfo.replaceAll("ZurückWeiter \\d+ / \\d+", "").trim();
+                    String numberedProductInfo = productNumber + ". " + productInfo;
+                    System.out.println(numberedProductInfo);
+                    carData.add(numberedProductInfo);
+                    productNumber++;
                 }
 
-                // Check if there is a next page
                 Elements nextPageElements = document.select(".FilteredListPagination_button__41hHM");
                 hasNextPage = !nextPageElements.isEmpty();
 
-                // Move to the next page
                 currentPage++;
             }
 
-            // Update the status label
+            // PDF erzeugen und speichern
+            PDFGenerator pdfGenerator = new PDFGenerator();
+            pdfGenerator.createPDF(filePath, carData);
             Platform.runLater(() -> statusLabel.setText("Status: Crawling complete"));
 
         } catch (IOException e) {
@@ -57,7 +62,6 @@ public class WebCrawler {
             Platform.runLater(() -> statusLabel.setText("Status: Error - " + e.getMessage()));
         }
     }
-
     private String buildSearchUrl(String baseUrl, String model, String brand, String year, String price, int page) {
         StringBuilder stringBuilder = new StringBuilder(baseUrl);
         if (brand != null) {
