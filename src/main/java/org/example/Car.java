@@ -71,7 +71,7 @@ public class Car {
         public void setFuel(String fuel) {
                 this.fuel = fuel;
         }
-        public String kilometers() {
+        public String getkilometers() {
                 return kilometers;
         }
 

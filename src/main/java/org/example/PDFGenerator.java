@@ -38,7 +38,7 @@ public class PDFGenerator {
 
 
                 paragraph.add("\nPrice: " + car.getPrice())
-                        .add("\nKilometers: " + car.kilometers())
+                        .add("\nKilometers: " + car.getkilometers())
                         .add("\nTransmission: " + car.getTransmission())
                         .add("\nFuel Type: " + car.getFuel());
 
