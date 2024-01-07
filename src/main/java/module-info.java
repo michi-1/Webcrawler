@@ -6,6 +6,7 @@ module org.example.webcrawlerui {
     requires activation;
     requires kernel;
     requires layout;
+    requires io;
 
 
     opens org.example.webcrawlerui to javafx.fxml;

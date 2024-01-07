@@ -104,7 +104,6 @@ public class WebCrawlerUI extends Application {
         String message = EmailMessageBuilder.buildEmailMessage();
 
 
-
         EmailSender mailer = new EmailSender();
         try {
             mailer.sendEmailWithAttachment(host, port, mailFrom, password, mailTo, subject, message, filePath);

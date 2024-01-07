@@ -14,49 +14,40 @@ import java.util.List;
 public class WebCrawler {
 
     private Label statusLabel;
-
+    private CarExtractor carExtractor = new CarExtractor();
 
     public WebCrawler(Label statusLabel) {
         this.statusLabel = statusLabel;
-
     }
+
     public void crawlAndSave(String brand, String model, String year, String price, String filePath) {
-        List<String> carData = new ArrayList<>();
+        List<Car> cars = new ArrayList<>();
         statusLabel.setText("Status: Crawling...");
         String baseUrl = "https://www.autoscout24.at/lst";
+        String searchUrl = "";
 
         try {
             int currentPage = 1;
             boolean hasNextPage = true;
 
             while (hasNextPage) {
-                String searchUrl = buildSearchUrl(baseUrl, model, brand, year, price, currentPage);
+                searchUrl = buildSearchUrl(baseUrl, model, brand, year, price, currentPage);
                 Document document = Jsoup.connect(searchUrl).get();
-                int productNumber = 1;
-                String title = document.title();
-                System.out.println("Title: " + title);
 
-                Elements productElements = document.select(".list-page-item");
+                Elements productElements = document.select("article.cldt-summary-full-item");
                 for (Element productElement : productElements) {
-                    String productInfo = productElement.text();
-                    productInfo = productInfo.replaceAll("ZurückWeiter \\d+ / \\d+", "").trim();
-                    String numberedProductInfo = productNumber + ". " + productInfo;
-                    System.out.println(numberedProductInfo);
-                    carData.add(numberedProductInfo);
-                    productNumber++;
+                    Car car = carExtractor.extractCar(productElement);
+                    cars.add(car);
                 }
 
                 Elements nextPageElements = document.select(".FilteredListPagination_button__41hHM");
                 hasNextPage = !nextPageElements.isEmpty();
-
                 currentPage++;
             }
 
-
             PDFGenerator pdfGenerator = new PDFGenerator();
-            pdfGenerator.createPDF(filePath, carData);
+            pdfGenerator.createPDF(filePath, cars, searchUrl,brand, model, year, price);
             Platform.runLater(() -> statusLabel.setText("Status: Crawling complete"));
-
         } catch (IOException e) {
             e.printStackTrace();
             Platform.runLater(() -> statusLabel.setText("Status: Error - " + e.getMessage()));
