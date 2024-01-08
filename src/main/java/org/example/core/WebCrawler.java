@@ -41,7 +41,7 @@ public class WebCrawler {
                     Car car = carExtractor.extractCar(productElement);
                     cars.add(car);
                 }
-                System.out.println(searchUrl);
+                //System.out.println(searchUrl);
                 currentPage++;
             }
 

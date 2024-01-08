@@ -1,5 +1,7 @@
 package org.example.model;
 
+import java.util.Objects;
+
 public class Car {
         private String title;
         private String link;
@@ -75,6 +77,7 @@ public class Car {
         public void setFuel(String fuel) {
                 this.fuel = fuel;
         }
+
         public String getkilometers() {
                 return kilometers;
         }
@@ -84,9 +87,28 @@ public class Car {
         }
 
         @Override
-        public String toString(){
+        public String toString() {
                 return "Car{title=" + getTitle() + ", link=" + getLink() + ", imageURL"
                         + getImageUrl() + ", price" + getPrice() + " ,transmision" +
-                        getTransmission() + ", fuel"  + getFuel() + ",kilometer" + getkilometers() + "}";
+                        getTransmission() + ", fuel" + getFuel() + ",kilometer" + getkilometers() + "}";
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+                if (this == obj) return true;
+                if (obj == null || getClass() != obj.getClass()) return false;
+                Car car = (Car) obj;
+                return Objects.equals(getTitle(), car.getTitle()) &&
+                        Objects.equals(getLink(), car.getLink()) &&
+                        Objects.equals(getImageUrl(), car.getImageUrl()) &&
+                        Objects.equals(getPrice(), car.getPrice()) &&
+                        Objects.equals(getTransmission(), car.getTransmission()) &&
+                        Objects.equals(getFuel(), car.getFuel()) &&
+                        Objects.equals(getkilometers(), car.getkilometers());
+        }
+
+        @Override
+        public int hashCode() {
+                return Objects.hash(getTitle(), getLink(), getImageUrl(), getPrice(), getTransmission(), getFuel(), getkilometers());
         }
 }
