@@ -11,11 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.example.EmailMessageBuilder;
-import org.example.EmailSender;
 import org.example.WebCrawler;
-
-import java.io.File;
 
 public class WebCrawlerUI extends Application {
 
@@ -81,37 +77,9 @@ public class WebCrawlerUI extends Application {
         String model = modelField.getText();
         String year = yearField.getText();
         String price = priceField.getText();
-        String userDir = System.getProperty("user.dir");
-
-        // Zielpfad für das 'target'-Verzeichnis bilden
-        String targetDirPath = userDir + File.separator + "target";
-        String fileName = "autoscout24-report.pdf";
-        String filePath = targetDirPath + File.separator + fileName;
 
         // Instantiate WebCrawler and start crawling
         WebCrawler webCrawler = new WebCrawler(statusLabel);
-        webCrawler.crawlAndSave(brand, model, year, price,filePath);
-        sendEmailWithPDF(filePath);
+        webCrawler.crawl(brand, model, year, price);
     }
-    private void sendEmailWithPDF(String filePath) {
-
-        String host = "smtp.gmail.com";
-        String port = "587";
-        String mailFrom = "carcrawlpro@gmail.com";
-        String password = "idvg yxfh gept zkpa";
-        String mailTo = "nourani.nahid@gmail.com";
-        String subject = "Begrüßung zu Ihrem individuellen Fahrzeugbericht";
-        String message = EmailMessageBuilder.buildEmailMessage();
-
-
-        EmailSender mailer = new EmailSender();
-        try {
-            mailer.sendEmailWithAttachment(host, port, mailFrom, password, mailTo, subject, message, filePath);
-            Platform.runLater(() -> statusLabel.setText("E-Mail wurde erfolgreich gesendet."));
-        } catch (Exception e) {
-            Platform.runLater(() -> statusLabel.setText("Fehler beim Senden der E-Mail: " + e.getMessage()));
-            e.printStackTrace();
-        }
-    }
-
 }
