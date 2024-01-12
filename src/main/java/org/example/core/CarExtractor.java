@@ -1,11 +1,14 @@
-package org.example;
+package org.example.core;
 
+import org.example.model.Car;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class CarExtractor {
 
     public Car extractCar(Element productElement) {
+
+        String anzahl = extractText(productElement.select("h1"));
 
         String title = extractText(productElement.select("h2"));
         String link = "https://www.autoscout24.at" + productElement.select("a[href]").attr("href");
@@ -22,12 +25,10 @@ public class CarExtractor {
                 kilometers = text;
             } else if (text.equalsIgnoreCase("Automatik") || text.equalsIgnoreCase("Schaltgetriebe")) {
                 transmission = text;
-            } else if (text.equalsIgnoreCase("Benzin") || text.equalsIgnoreCase("Diesel") || text.equalsIgnoreCase("Elektro/Benzin")) {
+            } else if (text.equalsIgnoreCase("Benzin") || text.equalsIgnoreCase("Diesel") || text.equalsIgnoreCase("Elektro/Benzin" ) || text.equalsIgnoreCase("Elektro") || text.equalsIgnoreCase("Elektro/Diesel") || text.equalsIgnoreCase("Wasserstoff") || text.equalsIgnoreCase("Autogas (LPG)") || text.equalsIgnoreCase("Erdgas (CNG)") || text.equalsIgnoreCase("Sonstiges")) {
                 fuel = text;
             }
         }
-        System.out.println(kilometers + transmission + fuel);
-
         return new Car(title, link, imageUrl, price, transmission, fuel, kilometers);
     }
     private String extractText(Elements elements) {

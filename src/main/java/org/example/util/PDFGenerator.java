@@ -1,4 +1,4 @@
-package org.example;
+package org.example.util;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -8,6 +8,7 @@ import com.itextpdf.layout.element.Link;
 import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.layout.property.TextAlignment;
+import org.example.model.Car;
 import java.io.IOException;
 import java.util.List;
 

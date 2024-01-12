@@ -1,4 +1,4 @@
-package org.example;
+package org.example.model;
 
 public class Car {
         private String title;
@@ -8,6 +8,10 @@ public class Car {
         private String transmission;
         private String fuel;
         private String kilometers;
+
+        public Car() {
+
+        }
 
         public Car(String title, String link, String imageUrl, String price, String transmission, String fuel, String kilometers) {
                 this.title = title;
@@ -77,5 +81,12 @@ public class Car {
 
         public void setkilometers(String kilometers) {
                 this.kilometers = kilometers;
+        }
+
+        @Override
+        public String toString(){
+                return "Car{title=" + getTitle() + ", link=" + getLink() + ", imageURL"
+                        + getImageUrl() + ", price" + getPrice() + " ,transmision" +
+                        getTransmission() + ", fuel"  + getFuel() + ",kilometer" + getkilometers() + "}";
         }
 }

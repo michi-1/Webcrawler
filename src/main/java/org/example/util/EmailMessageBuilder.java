@@ -1,4 +1,4 @@
-package org.example;
+package org.example.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +10,7 @@ public class EmailMessageBuilder {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String formattedDate = dateFormat.format(now);
 
-        // E-Mail-Text erstellen
+
         StringBuilder message = new StringBuilder();
         message.append("Sehr geehrter Kunde,<br><br>");
         message.append("Wir freuen uns, Ihnen unseren neuesten Fahrzeugbericht präsentieren zu können. ");
