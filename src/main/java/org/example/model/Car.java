@@ -1,5 +1,8 @@
 package org.example.model;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class Car {
@@ -29,62 +32,42 @@ public class Car {
                 return title;
         }
 
-        public void setTitle(String title) {
-                this.title = title;
-        }
 
-        // Getter und Setter für link
+
+
         public String getLink() {
                 return link;
         }
 
-        public void setLink(String link) {
-                this.link = link;
-        }
 
-        // Getter und Setter für imageUrl
+
+
         public String getImageUrl() {
                 return imageUrl;
         }
 
-        public void setImageUrl(String imageUrl) {
-                this.imageUrl = imageUrl;
-        }
 
-        // Getter und Setter für price
+
+
         public String getPrice() {
                 return price;
         }
 
-        public void setPrice(String price) {
-                this.price = price;
-        }
 
-        // Getter und Setter für transmission
+
         public String getTransmission() {
                 return transmission;
         }
 
-        public void setTransmission(String transmission) {
-                this.transmission = transmission;
-        }
 
-        // Getter und Setter für fuel
         public String getFuel() {
                 return fuel;
-        }
-
-        public void setFuel(String fuel) {
-                this.fuel = fuel;
         }
 
         public String getkilometers() {
                 return kilometers;
         }
 
-        public void setkilometers(String kilometers) {
-                this.kilometers = kilometers;
-        }
 
         @Override
         public String toString() {
@@ -98,14 +81,17 @@ public class Car {
                 if (this == obj) return true;
                 if (obj == null || getClass() != obj.getClass()) return false;
                 Car car = (Car) obj;
-                return Objects.equals(getTitle(), car.getTitle()) &&
-                        Objects.equals(getLink(), car.getLink()) &&
-                        Objects.equals(getImageUrl(), car.getImageUrl()) &&
-                        Objects.equals(getPrice(), car.getPrice()) &&
-                        Objects.equals(getTransmission(), car.getTransmission()) &&
-                        Objects.equals(getFuel(), car.getFuel()) &&
-                        Objects.equals(getkilometers(), car.getkilometers());
+
+                List<String> thisCarAttributes = Arrays.asList(getTitle(), getLink(), getImageUrl(), getPrice(), getTransmission(), getFuel(), getkilometers());
+                List<String> otherCarAttributes = Arrays.asList(car.getTitle(), car.getLink(), car.getImageUrl(), car.getPrice(), car.getTransmission(), car.getFuel(), car.getkilometers());
+
+                Collections.sort(thisCarAttributes);
+                Collections.sort(otherCarAttributes);
+
+                //System.out.println("Car attributes not equal: " + thisCarAttributes + " vs " + otherCarAttributes);
+                return thisCarAttributes.equals(otherCarAttributes);
         }
+
 
         @Override
         public int hashCode() {
