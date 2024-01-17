@@ -3,6 +3,8 @@ package org.example.services;
 import org.example.doa.SearchCriteriaDAO;
 import org.example.model.User;
 import org.example.doa.UserDAO;
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.*;
 
 public class UserService {
@@ -24,8 +26,9 @@ public class UserService {
             if (userDAO.userExists(email)) {
                 return false;
             }
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-            return userDAO.createUser(email, password);
+            return userDAO.createUser(email, hashedPassword);
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -34,14 +37,24 @@ public class UserService {
 
     public User loginUser(String email, String password) {
         try {
-            User user = userDAO.getUserByEmailAndPassword(email, password);
+            User user = userDAO.getUserByEmail(email);
+
             if (user != null) {
-                this.loggedInUserEmail = email;
-                return user;
+                // Das in der Datenbank gespeicherte gehashte Passwort abrufen
+                String storedHashedPassword = user.getPassword();
+
+                // Das eingegebene Passwort mit dem gehashten Passwort vergleichen
+                if (BCrypt.checkpw(password, storedHashedPassword)) {
+                    // Einloggen erfolgreich
+                    this.loggedInUserEmail = email;
+                    return user;
+                }
             }
+            // Einloggen fehlgeschlagen
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
+            // Fehler beim Einloggen
             return null;
         }
     }

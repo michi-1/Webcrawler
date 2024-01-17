@@ -112,5 +112,22 @@ public class UserDAO {
             }
         }
     }
+    public User getUserByEmail(String email) throws SQLException {
+        String query = "SELECT * FROM users WHERE email = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new User(
+                            resultSet.getInt("id"),
+                            resultSet.getString("email"),
+                            resultSet.getString("password")
+                    );
+                }
+            }
+        }
+        return null;
+    }
 }
 
