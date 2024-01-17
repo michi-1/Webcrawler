@@ -7,8 +7,6 @@ import org.example.model.SearchCriteria;
 import org.example.services.SearchCriteriaService;
 import org.example.ui.LoginRegistrationUI;
 import org.example.util.*;
-
-
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;

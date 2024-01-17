@@ -9,14 +9,18 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.example.model.RegistrationStatus;
 import org.example.model.User;
 import org.example.services.UserService;
+import org.example.util.EmailValidator;
 
 
 public class LoginRegistrationUI extends Application {
 
     private UserService userService;
     private Label statusLabel;
+    TextField emailTextField = new TextField();
+    PasswordField passwordField = new PasswordField();
 
     public static void main(String[] args) {
         launch(args);
@@ -36,8 +40,8 @@ public class LoginRegistrationUI extends Application {
         Label emailLabel = new Label("Email:");
         Label passwordLabel = new Label("Password:");
 
-        TextField emailTextField = new TextField();
-        PasswordField passwordField = new PasswordField();
+
+
 
         Button loginButton = new Button("Login");
         Button registerButton = new Button("Register");
@@ -84,10 +88,18 @@ public class LoginRegistrationUI extends Application {
         if (user != null) {
             setStatusLabel("Login successful. Welcome, " + user.getEmail());
             openWebCrawlerUI(email);
+            Scene currentScene = emailTextField.getScene();
+            if (currentScene != null) {
+                Stage stage = (Stage) currentScene.getWindow();
+                if (stage != null) {
+                    stage.close();
+                }
+            }
         } else {
             setStatusLabel("Login Failed. Invalid email or password.");
         }
     }
+
 
     private void openWebCrawlerUI(String email) {
         WebCrawlerUI webCrawlerUI = new WebCrawlerUI();
@@ -98,19 +110,18 @@ public class LoginRegistrationUI extends Application {
 
 
     private void handleRegister(String email, String password) {
-        boolean success = userService.registerUser(email, password);
-        if (success) {
+        RegistrationStatus status = userService.registerUser(email, password);
+
+        if (status.isSuccess()) {
             setStatusLabel("Registration Successful!");
         } else {
-            setStatusLabel("Registration Failed. Email already exists or an error occurred.");
+            setStatusLabel(status.getMessage());
         }
     }
-
     private boolean isValidEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        return email.matches(emailRegex);
+        EmailValidator emailValidator = new EmailValidator();
+        return emailValidator.isValid(email);
     }
-
     private void setStatusLabel(String message) {
         statusLabel.setText(message);
     }

@@ -1,37 +1,54 @@
 package org.example.services;
 
 import org.example.doa.SearchCriteriaDAO;
+import org.example.model.RegistrationStatus;
 import org.example.model.User;
 import org.example.doa.UserDAO;
+import org.example.util.PasswordValidator;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 
 public class UserService {
-    private UserDAO userDAO;
-    private SearchCriteriaDAO searchCriteriaDAO;
+    private final UserDAO userDAO;
+    private final SearchCriteriaDAO searchCriteriaDAO;
     private String loggedInUserEmail;
+
+    private final PasswordValidator passwordValidator;
 
     public UserService() {
         this.userDAO = new UserDAO();
         this.searchCriteriaDAO = new SearchCriteriaDAO();
+        this.passwordValidator = new PasswordValidator();
+    }
+    public void logoutUser() {
+        this.loggedInUserEmail = null;
     }
 
     public User getUser(int userId) throws SQLException {
         return userDAO.getUser(userId);
     }
 
-    public boolean registerUser(String email, String password) {
+
+    public RegistrationStatus registerUser(String email, String password) {
+        if (!passwordValidator.isValidPassword(password)) {
+            return RegistrationStatus.invalidPassword();
+        }
+
         try {
             if (userDAO.userExists(email)) {
-                return false;
+                return RegistrationStatus.emailExists();
             }
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-            return userDAO.createUser(email, hashedPassword);
+            if (userDAO.createUser(email, hashedPassword)) {
+                return RegistrationStatus.success();
+            } else {
+                return RegistrationStatus.invalidPassword();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return RegistrationStatus.invalidPassword();
         }
     }
 
@@ -40,27 +57,19 @@ public class UserService {
             User user = userDAO.getUserByEmail(email);
 
             if (user != null) {
-                // Das in der Datenbank gespeicherte gehashte Passwort abrufen
                 String storedHashedPassword = user.getPassword();
 
-                // Das eingegebene Passwort mit dem gehashten Passwort vergleichen
+
                 if (BCrypt.checkpw(password, storedHashedPassword)) {
-                    // Einloggen erfolgreich
                     this.loggedInUserEmail = email;
                     return user;
                 }
             }
-            // Einloggen fehlgeschlagen
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
-            // Fehler beim Einloggen
             return null;
         }
-    }
-
-    public void logoutUser() {
-        this.loggedInUserEmail = null;
     }
 
     public boolean deleteUser(int userId) {
@@ -75,8 +84,6 @@ public class UserService {
             return false;
         }
     }
-
-
     public int getUserIdByEmail(String email) {
         try {
             return userDAO.getUserIdByEmail(email);
