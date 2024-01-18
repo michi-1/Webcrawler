@@ -15,7 +15,7 @@ public class DataComparator {
     public List<Car> findDifferences(List<Car> currentResults, List<Car> lastResults) {
         List<Car> differences = new ArrayList<>();
         if (lastResults == null || currentResults == null) {
-            return differences; // Leere Liste zurückgeben, wenn eine der Listen null ist
+            return differences;
         }
 
         for (Car currentCar : currentResults) {

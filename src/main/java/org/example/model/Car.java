@@ -8,7 +8,6 @@ import java.util.Objects;
 public class Car {
         private String title;
         private String link;
-        private String imageUrl;
         private String price;
         private String transmission;
         private String fuel;
@@ -18,10 +17,9 @@ public class Car {
 
         }
 
-        public Car(String title, String link, String imageUrl, String price, String transmission, String fuel, String kilometers) {
+        public Car(String title, String link, String price, String transmission, String fuel, String kilometers) {
                 this.title = title;
                 this.link = link;
-                this.imageUrl = imageUrl;
                 this.price = price;
                 this.transmission = transmission;
                 this.fuel = fuel;
@@ -42,9 +40,6 @@ public class Car {
 
 
 
-        public String getImageUrl() {
-                return imageUrl;
-        }
 
 
 
@@ -71,8 +66,8 @@ public class Car {
 
         @Override
         public String toString() {
-                return "Car{title=" + getTitle() + ", link=" + getLink() + ", imageURL"
-                        + getImageUrl() + ", price" + getPrice() + " ,transmision" +
+                return "Car{title=" + getTitle() + ", link=" + getLink() +
+                         ", price" + getPrice() + " ,transmision" +
                         getTransmission() + ", fuel" + getFuel() + ",kilometer" + getkilometers() + "}";
         }
 
@@ -82,8 +77,8 @@ public class Car {
                 if (obj == null || getClass() != obj.getClass()) return false;
                 Car car = (Car) obj;
 
-                List<String> thisCarAttributes = Arrays.asList(getTitle(), getLink(), getImageUrl(), getPrice(), getTransmission(), getFuel(), getkilometers());
-                List<String> otherCarAttributes = Arrays.asList(car.getTitle(), car.getLink(), car.getImageUrl(), car.getPrice(), car.getTransmission(), car.getFuel(), car.getkilometers());
+                List<String> thisCarAttributes = Arrays.asList(getTitle(), getLink(), getPrice(), getTransmission(), getFuel(), getkilometers());
+                List<String> otherCarAttributes = Arrays.asList(car.getTitle(), car.getLink(), car.getPrice(), car.getTransmission(), car.getFuel(), car.getkilometers());
 
                 Collections.sort(thisCarAttributes);
                 Collections.sort(otherCarAttributes);
@@ -95,6 +90,6 @@ public class Car {
 
         @Override
         public int hashCode() {
-                return Objects.hash(getTitle(), getLink(), getImageUrl(), getPrice(), getTransmission(), getFuel(), getkilometers());
+                return Objects.hash(getTitle(), getLink(), getPrice(), getTransmission(), getFuel(), getkilometers());
         }
 }

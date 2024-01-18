@@ -12,7 +12,6 @@ public class CarExtractor {
 
         String title = extractText(productElement.select("h2"));
         String link = "https://www.autoscout24.at" + productElement.select("a[href]").attr("href");
-        String imageUrl = extractImageSrc(productElement.select("picture.NewGallery_picture__fNsZr img"));
         String price = productElement.select("p.Price_price__APlgs").text();
         Elements vehicleDetails = productElement.select("div.VehicleDetailTable_container__XhfV1 span.VehicleDetailTable_item__4n35N");
         String kilometers = "";
@@ -29,7 +28,7 @@ public class CarExtractor {
                 fuel = text;
             }
         }
-        return new Car(title, link, imageUrl, price, transmission, fuel, kilometers);
+        return new Car(title, link, price, transmission, fuel, kilometers);
     }
     private String extractText(Elements elements) {
         return elements.isEmpty() ? "Nicht verfügbar" : elements.text();
