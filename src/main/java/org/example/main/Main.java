@@ -36,8 +36,9 @@ public class Main {
             @Override
             public void run() {
                 List<SearchCriteria> allSearchCriteria = searchCriteriaService.getAllSearchCriteria();
-                NameToIdConverter brandConverter = new NameToIdConverter("/Users/nahidnourani/Desktop/Semester5/Webcrawler/Mappe1.csv");
-                NameToIdConverter modelConverter = new NameToIdConverter("/Users/nahidnourani/Desktop/Semester5/Webcrawler/Mappe2.csv");
+                String currentDir = System.getProperty("user.dir");
+                NameToIdConverter brandConverter = new NameToIdConverter(currentDir + "/Mappe1.csv");
+                NameToIdConverter modelConverter = new NameToIdConverter(currentDir + "/Mappe2.csv");
 
                 for (SearchCriteria criteria : allSearchCriteria) {
                     new Thread(() -> {
