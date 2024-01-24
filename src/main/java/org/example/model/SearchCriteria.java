@@ -72,5 +72,6 @@ public class SearchCriteria {
                 year != null && !year.isEmpty() &&
                 price != null && !price.isEmpty();
     }
+
 }
 

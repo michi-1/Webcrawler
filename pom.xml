@@ -18,6 +18,11 @@
             <artifactId>jsoup</artifactId>
             <version>1.15.3</version>
         </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>3.141.59</version>
+            </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
@@ -77,6 +82,16 @@
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.crashvb</groupId>
+            <artifactId>chromedriver</artifactId>
+            <version>2.41</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.crashvb</groupId>
+            <artifactId>chromedriver</artifactId>
+            <version>2.41</version>
         </dependency>
     </dependencies>
     <build>

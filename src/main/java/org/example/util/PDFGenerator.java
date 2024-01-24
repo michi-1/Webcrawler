@@ -19,7 +19,7 @@ public class PDFGenerator {
             PdfWriter writer = new PdfWriter(filePath);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
-            String linkText = String.format("Auto-Liste basierend auf Ihrer Suche bei AutoScout24\n%s %s aus dem Jahr %s bis zu einem Preis von %s\n\n", brand, model, year, price);
+            String linkText = String.format("Auto-Liste basierend auf Ihrer Suche ");
             Paragraph searchUrlParagraph = new Paragraph();
             Link urlLink = new Link(linkText,PdfAction.createURI(searchUrl));
             urlLink.setBold();

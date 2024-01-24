@@ -6,6 +6,9 @@ module org.example.webcrawlerui {
     requires kernel;
     requires layout;
     requires jbcrypt;
+    requires selenium.api;
+    requires selenium.safari.driver;
+    requires selenium.support;
 
     opens org.example.ui to javafx.fxml;
     exports org.example.ui;
